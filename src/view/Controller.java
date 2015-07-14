@@ -38,7 +38,7 @@ public class Controller {
         this.mainApp = mainApp;
 
         // Add observable list data to the table
-        metalTable.setItems(mainApp.getPersonData());
+        metalTable.setItems(mainApp.getData());
     }
 
  /*   private void showMetalDetails(Metals metal) {
@@ -76,7 +76,7 @@ public class Controller {
         Metals tempMetal = new Metals();
         boolean okClicked = mainApp.showMetalEditDialog(tempMetal);
         if (okClicked) {
-            mainApp.getPersonData().add(tempMetal);
+            mainApp.getData().add(tempMetal);
         }
     }
 

@@ -99,7 +99,7 @@ public class Main extends Application {
         launch(args);
     }
 
-    public ObservableList<Metals> getPersonData() {
+    public ObservableList<Metals> getData() {
         return metalData;
     }
 }
