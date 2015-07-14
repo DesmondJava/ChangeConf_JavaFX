@@ -5,16 +5,13 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-/**
- * Created by Администратор on 13.07.2015.
- */
 public class Metals {
 
     private final StringProperty title;
     private final DoubleProperty price;
 
     public Metals() {
-        this(null, null);
+        this(null, 0.0);
     }
 
 

@@ -1,14 +1,12 @@
-package core;
+package view;
 
+import core.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import model.Metals;
 import org.controlsfx.dialog.Dialogs;
 
-/**
- * Created by Администратор on 13.07.2015.
- */
 public class Controller {
 
     @FXML
@@ -29,11 +27,11 @@ public class Controller {
         lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
 
         // Clear person details.
-        showPersonDetails(null);
+//        showMetalDetails(null);
 
         // Listen for selection changes and show the person details when changed.
-        metalTable.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> showPersonDetails(newValue));
+   /*     metalTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> showMetalDetails(newValue));*/
     }
 
     public void setMainApp(Main mainApp) {
@@ -43,16 +41,16 @@ public class Controller {
         metalTable.setItems(mainApp.getPersonData());
     }
 
-    private void showPersonDetails(Metals metal) {
+ /*   private void showMetalDetails(Metals metal) {
         if (metal != null) {
             // Fill the labels with info from the person object.
-            firstNameColumn.setText(metal.getTitle());
+            firstNameColumn.setText("yo");
             lastNameColumn.setText(Double.toString(metal.getPrice()));
         } else {
             firstNameColumn.setText("");
             lastNameColumn.setText("");
         }
-    }
+    }*/
 
     @FXML
     private void handleDeleteMetal() {
@@ -63,8 +61,44 @@ public class Controller {
             // Nothing selected.
             Dialogs.create()
                     .title("No Selection")
-                    .masthead("Не был выбран метал")
-                    .message("Пожалуйста выбирете метал в таблице")
+                    .masthead("No Metal Selected")
+                    .message("Please select a metal in the table.")
+                    .showWarning();
+        }
+    }
+
+    /**
+     * Called when the user clicks the new button. Opens a dialog to edit
+     * details for a new person.
+     */
+    @FXML
+    private void handleNewMetal() {
+        Metals tempMetal = new Metals();
+        boolean okClicked = mainApp.showMetalEditDialog(tempMetal);
+        if (okClicked) {
+            mainApp.getPersonData().add(tempMetal);
+        }
+    }
+
+    /**
+     * Called when the user clicks the edit button. Opens a dialog to edit
+     * details for the selected person.
+     */
+    @FXML
+    private void handleEditMetal() {
+        Metals selectedMetal = metalTable.getSelectionModel().getSelectedItem();
+        if (selectedMetal != null) {
+            boolean okClicked = mainApp.showMetalEditDialog(selectedMetal);
+         /*   if (okClicked) {
+                showMetalDetails(selectedMetal);
+            }*/
+
+        } else {
+            // Nothing selected.
+            Dialogs.create()
+                    .title("No Selection")
+                    .masthead("No Metal Selected")
+                    .message("Please select a metal in the table.")
                     .showWarning();
         }
     }

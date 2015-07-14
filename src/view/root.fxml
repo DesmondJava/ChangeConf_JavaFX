@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Controller">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -66,8 +66,8 @@
                                        <children>
                                           <TableView fx:id="metalTable" editable="true" prefHeight="200.0" prefWidth="200.0">
                                             <columns>
-                                              <TableColumn fx:id="firstNameColumn" prefWidth="312.0" text="Драг метал" />
-                                              <TableColumn fx:id="lastNameColumn" prefWidth="286.0" text="Цена" />
+                                              <TableColumn fx:id="firstNameColumn" onEditStart="#handleEditMetal" prefWidth="312.0" text="Драг метал" />
+                                              <TableColumn fx:id="lastNameColumn" onEditStart="#handleEditMetal" prefWidth="286.0" text="Цена" />
                                             </columns>
                                              <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -75,9 +75,9 @@
                                           </TableView>
                                           <HBox spacing="10.0">
                                              <children>
-                                                <Button mnemonicParsing="false" text="Изменить" />
+                                                <Button mnemonicParsing="false" onAction="#handleEditMetal" text="Изменить" />
                                                 <Button mnemonicParsing="false" onAction="#handleDeleteMetal" text="Удалить" />
-                                                <Button mnemonicParsing="false" text="Создать" />
+                                                <Button mnemonicParsing="false" onAction="#handleNewMetal" text="Создать" />
                                              </children>
                                              <VBox.margin>
                                                 <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
