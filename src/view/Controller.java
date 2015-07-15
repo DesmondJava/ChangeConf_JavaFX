@@ -12,6 +12,8 @@ public class Controller {
     @FXML
     private TableView<Metals> metalTable;
     @FXML
+    private TableView<Metals> ind;
+    @FXML
     private TableColumn<Metals, String> firstNameColumn;
     @FXML
     private TableColumn<Metals, Double> lastNameColumn;
@@ -25,13 +27,6 @@ public class Controller {
     private void initialize() {
         firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
-
-        // Clear person details.
-//        showMetalDetails(null);
-
-        // Listen for selection changes and show the person details when changed.
-   /*     metalTable.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> showMetalDetails(newValue));*/
     }
 
     public void setMainApp(Main mainApp) {
@@ -40,17 +35,6 @@ public class Controller {
         // Add observable list data to the table
         metalTable.setItems(mainApp.getData());
     }
-
- /*   private void showMetalDetails(Metals metal) {
-        if (metal != null) {
-            // Fill the labels with info from the person object.
-            firstNameColumn.setText("yo");
-            lastNameColumn.setText(Double.toString(metal.getPrice()));
-        } else {
-            firstNameColumn.setText("");
-            lastNameColumn.setText("");
-        }
-    }*/
 
     @FXML
     private void handleDeleteMetal() {
@@ -65,6 +49,12 @@ public class Controller {
                     .message("Please select a metal in the table.")
                     .showWarning();
         }
+
+
+                for(Metals x : mainApp.getData()){
+                    System.out.println(x.getTitle());
+                }
+
     }
 
     /**
@@ -88,11 +78,7 @@ public class Controller {
     private void handleEditMetal() {
         Metals selectedMetal = metalTable.getSelectionModel().getSelectedItem();
         if (selectedMetal != null) {
-            boolean okClicked = mainApp.showMetalEditDialog(selectedMetal);
-         /*   if (okClicked) {
-                showMetalDetails(selectedMetal);
-            }*/
-
+            mainApp.showMetalEditDialog(selectedMetal);
         } else {
             // Nothing selected.
             Dialogs.create()

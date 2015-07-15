@@ -72,7 +72,7 @@ public class Main extends Application {
 
             // Create the dialog Stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Metal");
+            dialogStage.setTitle("Edit");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(window);
             Scene scene = new Scene(page);
