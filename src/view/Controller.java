@@ -4,19 +4,17 @@ import core.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import model.Metals;
+import model.ConfValue;
 import org.controlsfx.dialog.Dialogs;
 
 public class Controller {
 
     @FXML
-    private TableView<Metals> metalTable;
+    private TableView<ConfValue> table;
     @FXML
-    private TableView<Metals> ind;
+    private TableColumn<ConfValue, String> firstNameColumn;
     @FXML
-    private TableColumn<Metals, String> firstNameColumn;
-    @FXML
-    private TableColumn<Metals, Double> lastNameColumn;
+    private TableColumn<ConfValue, String> lastNameColumn;
 
     private Main mainApp;
 
@@ -26,35 +24,29 @@ public class Controller {
     @FXML
     private void initialize() {
         firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
+        lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
     }
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
 
         // Add observable list data to the table
-        metalTable.setItems(mainApp.getData());
+        table.setItems(mainApp.getData());
     }
 
     @FXML
     private void handleDeleteMetal() {
-        int selectedIndex = metalTable.getSelectionModel().getSelectedIndex();
+        int selectedIndex = table.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            metalTable.getItems().remove(selectedIndex);
+            table.getItems().remove(selectedIndex);
         } else {
             // Nothing selected.
             Dialogs.create()
                     .title("No Selection")
-                    .masthead("No Metal Selected")
-                    .message("Please select a metal in the table.")
+                    .masthead("No row selected")
+                    .message("Please select a row in the table.")
                     .showWarning();
         }
-
-
-                for(Metals x : mainApp.getData()){
-                    System.out.println(x.getTitle());
-                }
-
     }
 
     /**
@@ -63,7 +55,7 @@ public class Controller {
      */
     @FXML
     private void handleNewMetal() {
-        Metals tempMetal = new Metals();
+        ConfValue tempMetal = new ConfValue();
         boolean okClicked = mainApp.showMetalEditDialog(tempMetal);
         if (okClicked) {
             mainApp.getData().add(tempMetal);
@@ -76,15 +68,15 @@ public class Controller {
      */
     @FXML
     private void handleEditMetal() {
-        Metals selectedMetal = metalTable.getSelectionModel().getSelectedItem();
+        ConfValue selectedMetal = table.getSelectionModel().getSelectedItem();
         if (selectedMetal != null) {
             mainApp.showMetalEditDialog(selectedMetal);
         } else {
             // Nothing selected.
             Dialogs.create()
                     .title("No Selection")
-                    .masthead("No Metal Selected")
-                    .message("Please select a metal in the table.")
+                    .masthead("No row selected")
+                    .message("Please select a row in the table.")
                     .showWarning();
         }
     }

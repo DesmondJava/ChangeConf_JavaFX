@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -55,56 +56,25 @@
                               <Insets />
                            </opaqueInsets>
                         </HBox>
-                        <Accordion>
-                          <panes>
-                            <TitledPane animated="false" text="Драгоценные металы">
-                                 <content>
-                                    <VBox>
-                                       <children>
-                                          <TableView fx:id="metalTable" editable="true" prefHeight="200.0" prefWidth="200.0">
-                                            <columns>
-                                              <TableColumn fx:id="firstNameColumn" onEditStart="#handleEditMetal" prefWidth="312.0" text="Драг метал" />
-                                              <TableColumn fx:id="lastNameColumn" onEditStart="#handleEditMetal" prefWidth="286.0" text="Цена" />
-                                            </columns>
-                                             <columnResizePolicy>
-                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                             </columnResizePolicy>
-                                          </TableView>
-                                          <HBox spacing="10.0">
-                                             <children>
-                                                <Button mnemonicParsing="false" onAction="#handleEditMetal" text="Изменить" />
-                                                <Button mnemonicParsing="false" onAction="#handleDeleteMetal" text="Удалить" />
-                                                <Button mnemonicParsing="false" onAction="#handleNewMetal" text="Создать" />
-                                             </children>
-                                             <VBox.margin>
-                                                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                                             </VBox.margin>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                 </content>
-                            </TitledPane>
-                            <TitledPane animated="false" text="Процентные ставки">
-                                 <content>
-                                    <VBox>
-                                       <children>
-                                          <TableView fx:id="ind">
-                                            <columns>
-                                              <TableColumn prefWidth="75.0" text="C1" />
-                                              <TableColumn prefWidth="75.0" text="C2" />
-                                            </columns>
-                                          </TableView>
-                                       </children>
-                                    </VBox>
-                                 </content>
-                            </TitledPane>
-                            <TitledPane animated="false" text="untitled 3">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </TitledPane>
-                          </panes>
-                        </Accordion>
+                        <TableView fx:id="table" editable="true" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn fx:id="firstNameColumn" onEditStart="#handleEditMetal" prefWidth="312.0" text="Название" />
+                            <TableColumn fx:id="lastNameColumn" onEditStart="#handleEditMetal" prefWidth="286.0" text="Значение" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <HBox spacing="10.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#handleEditMetal" text="Изменить" />
+                              <Button mnemonicParsing="false" onAction="#handleDeleteMetal" text="Удалить" />
+                              <Button mnemonicParsing="false" onAction="#handleNewMetal" text="Создать" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </VBox.margin>
+                        </HBox>
                      </children>
                   </VBox>
                </content>

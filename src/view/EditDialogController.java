@@ -3,7 +3,7 @@ package view;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import model.Metals;
+import model.ConfValue;
 import org.controlsfx.dialog.Dialogs;
 
 public class EditDialogController {
@@ -11,10 +11,10 @@ public class EditDialogController {
         @FXML
         private TextField title;
         @FXML
-        private TextField price;
+        private TextField value;
 
         private Stage dialogStage;
-        private Metals metal;
+        private ConfValue confValue;
         private boolean okClicked = false;
 
         /**
@@ -34,10 +34,10 @@ public class EditDialogController {
             this.dialogStage = dialogStage;
         }
 
-        public void setMetal(Metals metal) {
-            this.metal = metal;
-            title.setText(metal.getTitle());
-            price.setText(Double.toString(metal.getPrice()));
+        public void setMetal(ConfValue confValue) {
+            this.confValue = confValue;
+            this.title.setText(confValue.getTitle());
+            this.value.setText(confValue.getValue());
         }
 
         /**
@@ -55,8 +55,8 @@ public class EditDialogController {
         @FXML
         private void handleOk() {
             if (isInputValid()) {
-                metal.setTitle(title.getText());
-                metal.setPrice(Double.parseDouble(price.getText()));
+                confValue.setTitle(title.getText());
+                confValue.setPrice(value.getText());
                 okClicked = true;
                 dialogStage.close();
             }
@@ -81,16 +81,8 @@ public class EditDialogController {
             if (title.getText() == null || title.getText().length() == 0) {
                 errorMessage += "No valid title!\n";
             }
-            if (price.getText() == null || price.getText().length() == 0) {
-                errorMessage += "No valid price!\n";
-            }
-            else {
-                // try to parse the postal code into an int.
-                try {
-                    Double.parseDouble(price.getText());
-                } catch (NumberFormatException e) {
-                    errorMessage += "No valid price (must be an double like 20.4)!\n";
-                }
+            if (value.getText() == null || value.getText().length() == 0) {
+                errorMessage += "No valid value!\n";
             }
             if (errorMessage.length() == 0) {
                 return true;

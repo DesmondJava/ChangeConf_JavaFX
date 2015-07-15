@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.Metals;
+import model.ConfValue;
 import view.Controller;
 import view.EditDialogController;
 
@@ -17,15 +17,15 @@ import java.io.IOException;
 
 public class Main extends Application {
 
-    private ObservableList<Metals> metalData = FXCollections.observableArrayList();
+    private ObservableList<ConfValue> data = FXCollections.observableArrayList();
     private Stage window;
     private BorderPane rootLayout;
 
     public Main(){
-        metalData.add(new Metals("Au333", 237.41));
-        metalData.add(new Metals("Au500", 356.47));
-        metalData.add(new Metals("Au750", 534.70));
-        metalData.add(new Metals("Au809", 576.76));
+        data.add(new ConfValue("Au333", "237.41"));
+        data.add(new ConfValue("Au500", "356.47"));
+        data.add(new ConfValue("Au750", "534.70"));
+        data.add(new ConfValue("Au809", "576.76"));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class Main extends Application {
         }
     }
 
-    public boolean showMetalEditDialog(Metals metal) {
+    public boolean showMetalEditDialog(ConfValue metal) {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -75,6 +75,7 @@ public class Main extends Application {
             dialogStage.setTitle("Edit");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(window);
+            dialogStage.setResizable(false);
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
 
@@ -99,7 +100,7 @@ public class Main extends Application {
         launch(args);
     }
 
-    public ObservableList<Metals> getData() {
-        return metalData;
+    public ObservableList<ConfValue> getData() {
+        return data;
     }
 }
