@@ -1,20 +1,28 @@
 package view;
 
 import core.Main;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import model.ConfValue;
 import org.controlsfx.dialog.Dialogs;
 
 public class Controller {
 
     @FXML
+    private TextField filterField;
+    @FXML
     private TableView<ConfValue> table;
     @FXML
-    private TableColumn<ConfValue, String> firstNameColumn;
+    private TableColumn<ConfValue, String> sort;
     @FXML
-    private TableColumn<ConfValue, String> lastNameColumn;
+    private TableColumn<ConfValue, String> title;
+    @FXML
+    private TableColumn<ConfValue, String> value;
 
     private Main mainApp;
 
@@ -23,15 +31,42 @@ public class Controller {
 
     @FXML
     private void initialize() {
-        firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
+        sort.setCellValueFactory(cellData -> cellData.getValue().sortProperty());
+        title.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        value.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
+
+
+
+
     }
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
 
         // Add observable list data to the table
-        table.setItems(mainApp.getData());
+        ObservableList data = mainApp.getData();
+        FilteredList<ConfValue> filteredData = new FilteredList<>(data, p -> true);
+        // 2. Set the filter Predicate whenever the filter changes.
+        filterField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(confValue -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (confValue.getSort().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                } else if (confValue.getTitle().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                }
+                return false; // Does not match.
+            });
+        });
+
+        SortedList<ConfValue> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(table.comparatorProperty());
+        table.setItems(sortedData);
     }
 
     @FXML

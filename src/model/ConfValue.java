@@ -7,33 +7,17 @@ public class ConfValue {
 
     private final StringProperty title;
     private final StringProperty value;
+    private final StringProperty sort;
 
     public ConfValue() {
-        this(null, null);
+        this(null, null, null);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        ConfValue confValue = (ConfValue) o;
-
-        if (title != null ? !title.equals(confValue.title) : confValue.title != null) return false;
-        return !(value != null ? !value.equals(confValue.value) : confValue.value != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = title != null ? title.hashCode() : 0;
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        return result;
-    }
-
-    public ConfValue(String title, String value) {
+    public ConfValue(String title, String value, String sort) {
         this.title = new SimpleStringProperty(title);
         this.value = new SimpleStringProperty(value);;
+        this.sort = new SimpleStringProperty(sort);;
     }
 
     public String getTitle() {
@@ -58,5 +42,21 @@ public class ConfValue {
 
     public void setPrice(String value) {
         this.value.set(value);
+    }
+
+    public void setValue(String value) {
+        this.value.set(value);
+    }
+
+    public String getSort() {
+        return sort.get();
+    }
+
+    public StringProperty sortProperty() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort.set(sort);
     }
 }

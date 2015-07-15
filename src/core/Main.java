@@ -22,10 +22,10 @@ public class Main extends Application {
     private BorderPane rootLayout;
 
     public Main(){
-        data.add(new ConfValue("Au333", "237.41"));
-        data.add(new ConfValue("Au500", "356.47"));
-        data.add(new ConfValue("Au750", "534.70"));
-        data.add(new ConfValue("Au809", "576.76"));
+        data.add(new ConfValue("Au333", "237.41", "Золото"));
+        data.add(new ConfValue("Au500", "356.47", "Золото"));
+        data.add(new ConfValue("Au750", "534.70", "Золото"));
+        data.add(new ConfValue("Au809", "576.76", "Золото"));
     }
 
     @Override
