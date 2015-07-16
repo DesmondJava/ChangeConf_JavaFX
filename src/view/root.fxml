@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Controller">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -72,10 +72,10 @@
                                     <Insets left="10.0" right="10.0" />
                                  </padding>
                               </Region>
-                              <Label text="Gold" />
+                              <Label text="Gold 585:" />
                               <TextField fx:id="gold" prefHeight="25.0" prefWidth="80.0" />
                               <Button mnemonicParsing="false" onAction="#changeGold" text="OK" />
-                              <Label text="Silver" />
+                              <Label text="Silver 875:" />
                               <TextField fx:id="silver" prefHeight="25.0" prefWidth="87.0" />
                               <Button mnemonicParsing="false" onAction="#changeSilver" text="OK" />
                            </children>
@@ -86,11 +86,11 @@
                               <Insets bottom="10.0" left="10.0" />
                            </VBox.margin>
                         </HBox>
-                        <TableView fx:id="table" editable="true" prefHeight="200.0" prefWidth="200.0">
+                        <TableView fx:id="table" editable="true">
                           <columns>
                               <TableColumn fx:id="sort" prefWidth="75.0" text="Тип" />
-                            <TableColumn fx:id="title" onEditStart="#handleEditMetal" prefWidth="312.0" text="Название" />
-                            <TableColumn fx:id="value" onEditStart="#handleEditMetal" prefWidth="286.0" text="Значение" />
+                            <TableColumn fx:id="title" onEditStart="#handleEditConfValue" prefWidth="312.0" text="Название" />
+                            <TableColumn fx:id="value" onEditStart="#handleEditConfValue" prefWidth="286.0" text="Значение" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -98,7 +98,7 @@
                         </TableView>
                         <HBox spacing="10.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#handleEditMetal" text="Изменить" />
+                              <Button mnemonicParsing="false" onAction="#handleEditConfValue" text="Изменить" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

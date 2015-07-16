@@ -5,9 +5,7 @@ import javafx.collections.ObservableList;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/**
- * Created by Администратор on 16.07.2015.
- */
+
 public class PriceMetal {
 
     private final static double PROCENT_OT_OCENOCHNOY_STOIMOSTI_1_DAY = 0.73;

@@ -37,7 +37,7 @@ public class EditDialogController {
             this.dialogStage = dialogStage;
         }
 
-        public void setMetal(ConfValue confValue) {
+        public void setConfValue(ConfValue confValue) {
             this.confValue = confValue;
             this.title.setText(confValue.getTitle());
             this.value.setText(confValue.getValue());

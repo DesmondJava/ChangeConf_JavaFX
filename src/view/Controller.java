@@ -16,16 +16,23 @@ public class Controller {
 
     @FXML
     private TextField filterField;
+
+    //Gold and silver fields for change price
     @FXML
     private TextField gold;
     @FXML
     private TextField silver;
+
+    //Table
     @FXML
     private TableView<ConfValue> table;
+    //First column - type
     @FXML
     private TableColumn<ConfValue, String> sort;
+    //Second column - key
     @FXML
     private TableColumn<ConfValue, String> title;
+    //Third column - value
     @FXML
     private TableColumn<ConfValue, String> value;
 
@@ -44,12 +51,10 @@ public class Controller {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-
         // Add observable list data to the table
         ObservableList data = mainApp.getData();
         FilteredList<ConfValue> filteredData = new FilteredList<>(data, p -> true);
         // 2. Set the filter Predicate whenever the filter changes.
-        System.out.println(filteredData.size() + "size");
         filterField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(confValue -> {
                 // If filter text is empty, display all persons.
@@ -58,8 +63,6 @@ public class Controller {
                 }
                 // Compare first name and last name of every person with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
-
-                System.out.println(filteredData.size() + "size");
                 if (confValue.getSort().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches first name.
                 } else if (confValue.getTitle().toLowerCase().contains(lowerCaseFilter)) {
@@ -68,7 +71,6 @@ public class Controller {
                 return false; // Does not match.
             });
         });
-
         SortedList<ConfValue> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(table.comparatorProperty());
         table.setItems(sortedData);
@@ -76,13 +78,12 @@ public class Controller {
 
     /**
      * Called when the user clicks the edit button. Opens a dialog to edit
-     * details for the selected person.
      */
     @FXML
-    private void handleEditMetal() {
+    private void handleEditConfValue() {
         ConfValue selectedRow = table.getSelectionModel().getSelectedItem();
         if (selectedRow != null) {
-            mainApp.showMetalEditDialog(selectedRow);
+            mainApp.showConfValueEditDialog(selectedRow);
         } else {
             // Nothing selected.
             Dialogs.create()
@@ -93,6 +94,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Called when the user clicks the ok button around gold field. Changes price of the golds
+     */
     @FXML
     private void changeGold(){
         String priceGold = gold.getText();
@@ -109,6 +113,9 @@ public class Controller {
         gold.setText("");
     }
 
+    /**
+     * Called when the user clicks the ok button around silver field. Changes price of the silvers
+     */
     @FXML
     private void changeSilver(){
         String priceSilver = silver.getText();

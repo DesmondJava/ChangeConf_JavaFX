@@ -36,10 +36,10 @@ public class Main extends Application {
                 "# сумма - целое число\n" +
                 "# процент - в формате 0.0999 (указать обязательно: 1 цифру в целой части, десятичную точку и хотя бы 1 цифру в дробной части)\n" +
                 "# пример: кредит до 5238 (т.е. кредит меньше 5238) - процент 0.816"));
-        data.add(new ConfValue("credit_5", "72.71", "Кредит", "величина суммы кредита зависит от срока залога"));
-        data.add(new ConfValue("credit_7", "72.56", "Кредит", "величина суммы кредита зависит от срока залога"));
-        data.add(new ConfValue("credit_8", "72.49", "Кредит", "величина суммы кредита зависит от срока залога"));
-        data.add(new ConfValue("default_term", "10", "Разное", "срок залога по умолчанию"));
+        data.add(new ConfValue("credit_5", "72.71", "Кредит", "Величина суммы кредита зависит от срока залога"));
+        data.add(new ConfValue("credit_7", "72.56", "Кредит", "Величина суммы кредита зависит от срока залога"));
+        data.add(new ConfValue("credit_8", "72.49", "Кредит", "Величина суммы кредита зависит от срока залога"));
+        data.add(new ConfValue("default_term", "10", "Разное", "Срок залога по умолчанию"));
         data.add(new ConfValue("serial_port", "/dev/ttyS0", "Разное", "файл устройства COM-порта"));
     }
 
@@ -47,22 +47,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         this.window = primaryStage;
         this.window.setTitle("Pectorale configuration");
-        showMetalOverview();
+        showConfValuesOverview();
     }
 
-    public void initRootLayout() {
+    public void showConfValuesOverview() {
         try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/view/root.fxml"));
-            rootLayout = (BorderPane) loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void showMetalOverview() {
-        try {
-            // Load person overview.
+            // Load table overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("/view/root.fxml"));
             rootLayout = (BorderPane) loader.load();
@@ -72,13 +62,15 @@ public class Main extends Application {
 
             Scene scene = new Scene(rootLayout);
             window.setScene(scene);
+            window.setMinWidth(693);
+            window.setMinHeight(300);
             window.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean showMetalEditDialog(ConfValue metal) {
+    public boolean showConfValueEditDialog(ConfValue confValue) {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -97,7 +89,7 @@ public class Main extends Application {
             // Set the person into the controller.
             EditDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setMetal(metal);
+            controller.setConfValue(confValue);
 
             // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();
