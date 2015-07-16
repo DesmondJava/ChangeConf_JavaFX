@@ -59,11 +59,25 @@
                         <HBox alignment="CENTER_LEFT" spacing="10.0">
                            <children>
                               <Label text="Filter Table: " />
-                              <TextField fx:id="filterField" alignment="CENTER" prefHeight="27.0" prefWidth="223.0">
+                              <TextField fx:id="filterField" alignment="CENTER" prefHeight="27.0" prefWidth="117.0">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </TextField>
+                              <Region>
+                                 <HBox.margin>
+                                    <Insets left="10.0" right="10.0" />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets left="10.0" right="10.0" />
+                                 </padding>
+                              </Region>
+                              <Label text="Gold" />
+                              <TextField fx:id="gold" prefHeight="25.0" prefWidth="80.0" />
+                              <Button mnemonicParsing="false" onAction="#changeGold" text="OK" />
+                              <Label text="Silver" />
+                              <TextField fx:id="silver" prefHeight="25.0" prefWidth="87.0" />
+                              <Button mnemonicParsing="false" text="OK" />
                            </children>
                            <padding>
                               <Insets top="10.0" />
@@ -85,8 +99,6 @@
                         <HBox spacing="10.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#handleEditMetal" text="Изменить" />
-                              <Button mnemonicParsing="false" onAction="#handleDeleteMetal" text="Удалить" />
-                              <Button mnemonicParsing="false" onAction="#handleNewMetal" text="Создать" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

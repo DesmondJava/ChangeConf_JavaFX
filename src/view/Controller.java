@@ -9,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import model.ConfValue;
+import model.PriceMetal;
 import org.controlsfx.dialog.Dialogs;
 
 public class Controller {
@@ -73,37 +74,6 @@ public class Controller {
         table.setItems(sortedData);
     }
 
-
-
-    @FXML
-    private void handleDeleteMetal() {
-        int selectedIndex = table.getSelectionModel().getSelectedIndex();
-        System.out.println(selectedIndex);
-        if (selectedIndex >= 0) {
-            table.getItems().remove(selectedIndex);
-        } else {
-            // Nothing selected.
-            Dialogs.create()
-                    .title("No Selection")
-                    .masthead("No row selected")
-                    .message("Please select a row in the table.")
-                    .showWarning();
-        }
-    }
-
-    /**
-     * Called when the user clicks the new button. Opens a dialog to edit
-     * details for a new person.
-     */
-    @FXML
-    private void handleNewMetal() {
-        ConfValue tempMetal = new ConfValue();
-        boolean okClicked = mainApp.showMetalEditDialog(tempMetal);
-        if (okClicked) {
-            mainApp.getData().add(tempMetal);
-        }
-    }
-
     /**
      * Called when the user clicks the edit button. Opens a dialog to edit
      * details for the selected person.
@@ -121,6 +91,13 @@ public class Controller {
                     .message("Please select a row in the table.")
                     .showWarning();
         }
+    }
+
+    @FXML
+    private void changeGold(){
+        String priceGold = gold.getText();
+        double new_price = Double.parseDouble(priceGold);
+        PriceMetal.changeGoldPrice(mainApp.getData(), new_price);
     }
 
 }
