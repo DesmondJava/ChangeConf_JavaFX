@@ -77,7 +77,7 @@
                               <Button mnemonicParsing="false" onAction="#changeGold" text="OK" />
                               <Label text="Silver" />
                               <TextField fx:id="silver" prefHeight="25.0" prefWidth="87.0" />
-                              <Button mnemonicParsing="false" text="OK" />
+                              <Button mnemonicParsing="false" onAction="#changeSilver" text="OK" />
                            </children>
                            <padding>
                               <Insets top="10.0" />

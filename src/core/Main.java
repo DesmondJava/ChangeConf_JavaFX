@@ -22,8 +22,11 @@ public class Main extends Application {
     private BorderPane rootLayout;
 
     public Main(){
+        data.add(new ConfValue("Ag875", "6.95", "Серебро", "Цены на драгметаллы"));
         data.add(new ConfValue("Au333", "237.41", "Золото", "Цены на драгметаллы"));
         data.add(new ConfValue("Au500", "356.47", "Золото", "Цены на драгметаллы"));
+        data.add(new ConfValue("Ag800", "8.17", "Серебро", "Цены на драгметаллы"));
+        data.add(new ConfValue("Ag900", "7.15", "Серебро", "Цены на драгметаллы"));
         data.add(new ConfValue("Au750", "534.70", "Золото", "Цены на драгметаллы"));
         data.add(new ConfValue("interest_640", "0.921", "Проценты", "# проценты за пользование кредитом в зависимости от суммы кредита\n" +
                 "# сумма - целое число\n" +

@@ -96,8 +96,32 @@ public class Controller {
     @FXML
     private void changeGold(){
         String priceGold = gold.getText();
-        double new_price = Double.parseDouble(priceGold);
-        PriceMetal.changeGoldPrice(mainApp.getData(), new_price);
+        try {
+            double new_price = Double.parseDouble(priceGold);
+            PriceMetal.changeGoldPrice(mainApp.getData(), new_price);
+        } catch (NumberFormatException e) {
+            Dialogs.create()
+                    .title("Invalid Fields")
+                    .masthead("Please correct invalid fields")
+                    .message("Type pls number double like '20.4'")
+                    .showWarning();
+        }
+        gold.setText("");
     }
 
+    @FXML
+    private void changeSilver(){
+        String priceSilver = silver.getText();
+        try {
+            double new_price = Double.parseDouble(priceSilver);
+            PriceMetal.changeSilverPrice(mainApp.getData(), new_price);
+        } catch (NumberFormatException e){
+            Dialogs.create()
+                    .title("Invalid Fields")
+                    .masthead("Please correct invalid fields")
+                    .message("Type pls number double like '20.4'")
+                    .showWarning();
+        }
+        silver.setText("");
+    }
 }
