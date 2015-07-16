@@ -16,6 +16,10 @@ public class Controller {
     @FXML
     private TextField filterField;
     @FXML
+    private TextField gold;
+    @FXML
+    private TextField silver;
+    @FXML
     private TableView<ConfValue> table;
     @FXML
     private TableColumn<ConfValue, String> sort;
@@ -23,6 +27,7 @@ public class Controller {
     private TableColumn<ConfValue, String> title;
     @FXML
     private TableColumn<ConfValue, String> value;
+
 
     private Main mainApp;
 
@@ -34,10 +39,6 @@ public class Controller {
         sort.setCellValueFactory(cellData -> cellData.getValue().sortProperty());
         title.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         value.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
-
-
-
-
     }
 
     public void setMainApp(Main mainApp) {
@@ -47,6 +48,7 @@ public class Controller {
         ObservableList data = mainApp.getData();
         FilteredList<ConfValue> filteredData = new FilteredList<>(data, p -> true);
         // 2. Set the filter Predicate whenever the filter changes.
+        System.out.println(filteredData.size() + "size");
         filterField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(confValue -> {
                 // If filter text is empty, display all persons.
@@ -55,6 +57,8 @@ public class Controller {
                 }
                 // Compare first name and last name of every person with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
+
+                System.out.println(filteredData.size() + "size");
                 if (confValue.getSort().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches first name.
                 } else if (confValue.getTitle().toLowerCase().contains(lowerCaseFilter)) {
@@ -69,9 +73,12 @@ public class Controller {
         table.setItems(sortedData);
     }
 
+
+
     @FXML
     private void handleDeleteMetal() {
         int selectedIndex = table.getSelectionModel().getSelectedIndex();
+        System.out.println(selectedIndex);
         if (selectedIndex >= 0) {
             table.getItems().remove(selectedIndex);
         } else {
@@ -103,9 +110,9 @@ public class Controller {
      */
     @FXML
     private void handleEditMetal() {
-        ConfValue selectedMetal = table.getSelectionModel().getSelectedItem();
-        if (selectedMetal != null) {
-            mainApp.showMetalEditDialog(selectedMetal);
+        ConfValue selectedRow = table.getSelectionModel().getSelectedItem();
+        if (selectedRow != null) {
+            mainApp.showMetalEditDialog(selectedRow);
         } else {
             // Nothing selected.
             Dialogs.create()

@@ -1,6 +1,7 @@
 package view;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.ConfValue;
@@ -12,6 +13,8 @@ public class EditDialogController {
         private TextField title;
         @FXML
         private TextField value;
+        @FXML
+        private Label description;
 
         private Stage dialogStage;
         private ConfValue confValue;
@@ -38,6 +41,7 @@ public class EditDialogController {
             this.confValue = confValue;
             this.title.setText(confValue.getTitle());
             this.value.setText(confValue.getValue());
+            this.description.setText(confValue.getDescription());
         }
 
         /**
