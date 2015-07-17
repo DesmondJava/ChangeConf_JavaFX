@@ -63,7 +63,8 @@ public class Main extends Application {
             Scene scene = new Scene(rootLayout);
             window.setScene(scene);
             window.setMinWidth(693);
-            window.setMinHeight(300);
+            window.setMinHeight(600);
+            window.setResizable(false);
             window.show();
         } catch (IOException e) {
             e.printStackTrace();

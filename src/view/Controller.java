@@ -5,9 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import model.ConfValue;
 import model.PriceMetal;
 import org.controlsfx.dialog.Dialogs;
@@ -16,7 +14,6 @@ public class Controller {
 
     @FXML
     private TextField filterField;
-
     //Gold and silver fields for change price
     @FXML
     private TextField gold;
@@ -35,6 +32,30 @@ public class Controller {
     //Third column - value
     @FXML
     private TableColumn<ConfValue, String> value;
+
+    //CheckBox
+    @FXML
+    private CheckBox department1;
+    @FXML
+    private CheckBox department2;
+    @FXML
+    private CheckBox department3;
+    @FXML
+    private CheckBox department4;
+    @FXML
+    private CheckBox department5;
+    @FXML
+    private CheckBox department6;
+    @FXML
+    private CheckBox department7;
+    @FXML
+    private CheckBox department9;
+    @FXML
+    private CheckBox department0;
+    @FXML
+    private Label count_departments;
+    @FXML
+    private Label list_departments;
 
 
     private Main mainApp;
@@ -130,5 +151,48 @@ public class Controller {
                     .showWarning();
         }
         silver.setText("");
+    }
+
+    @FXML private void typeChoosenDepartments(){
+        int count = 0;
+        String choices = "";
+        if(department1.isSelected()){
+            count++;
+            choices += department1.getText() + "\n";
+        }
+        if(department2.isSelected()){
+            count++;
+            choices += department2.getText() + "\n";
+        }
+        if(department3.isSelected()){
+            count++;
+            choices += department3.getText() + "\n";
+        }
+        if(department4.isSelected()){
+            count++;
+            choices += department4.getText() + "\n";
+        }
+        if(department5.isSelected()){
+            count++;
+            choices += department5.getText() + "\n";
+        }
+        if(department6.isSelected()){
+            count++;
+            choices += department6.getText() + "\n";
+        }
+        if(department7.isSelected()){
+            count++;
+            choices += department7.getText() + "\n";
+        }
+        if(department9.isSelected()){
+            count++;
+            choices += department9.getText() + "\n";
+        }
+        if(department0.isSelected()){
+            count++;
+            choices += department0.getText() + "\n";
+        }
+        list_departments.setText(choices);
+        count_departments.setText("Количество выбраных отеделений: " + count);
     }
 }
