@@ -1,6 +1,7 @@
 package view;
 
 import core.Main;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -33,6 +34,10 @@ public class Controller {
     @FXML
     private TableColumn<ConfValue, String> value;
 
+    //For join different department
+    @FXML
+    private ComboBox<String> loadDiffDepart;
+
     //CheckBox
     @FXML
     private CheckBox department1;
@@ -56,6 +61,7 @@ public class Controller {
     private Label count_departments;
     @FXML
     private Label list_departments;
+    private ObservableList<CheckBox> checkboxesItemsDepartment;
 
 
     private Main mainApp;
@@ -65,9 +71,22 @@ public class Controller {
 
     @FXML
     private void initialize() {
+        //Инициализируем таблицу (колонки)
         sort.setCellValueFactory(cellData -> cellData.getValue().sortProperty());
         title.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         value.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
+
+        //Добавляем все отделения CheckBox (галочки) в массив
+        checkboxesItemsDepartment = FXCollections.observableArrayList();
+        checkboxesItemsDepartment.addAll(department1, department2, department3, department4,
+                department5, department6, department7, department9, department0);
+
+        //Проходим по всем галочкам и добавляем с них текст в выпадающий список при загрузки конф файла
+        ObservableList<String> listItemsDepartment = FXCollections.observableArrayList();
+        for(CheckBox department : checkboxesItemsDepartment){
+            listItemsDepartment.add(department.getText());
+        }
+        loadDiffDepart.setItems(listItemsDepartment);
     }
 
     public void setMainApp(Main mainApp) {
@@ -153,44 +172,15 @@ public class Controller {
         silver.setText("");
     }
 
-    @FXML private void typeChoosenDepartments(){
+    @FXML
+    private void typeChoosenDepartments() {
         int count = 0;
         String choices = "";
-        if(department1.isSelected()){
-            count++;
-            choices += department1.getText() + "\n";
-        }
-        if(department2.isSelected()){
-            count++;
-            choices += department2.getText() + "\n";
-        }
-        if(department3.isSelected()){
-            count++;
-            choices += department3.getText() + "\n";
-        }
-        if(department4.isSelected()){
-            count++;
-            choices += department4.getText() + "\n";
-        }
-        if(department5.isSelected()){
-            count++;
-            choices += department5.getText() + "\n";
-        }
-        if(department6.isSelected()){
-            count++;
-            choices += department6.getText() + "\n";
-        }
-        if(department7.isSelected()){
-            count++;
-            choices += department7.getText() + "\n";
-        }
-        if(department9.isSelected()){
-            count++;
-            choices += department9.getText() + "\n";
-        }
-        if(department0.isSelected()){
-            count++;
-            choices += department0.getText() + "\n";
+        for (CheckBox department : checkboxesItemsDepartment) {
+            if (department.isSelected()) {
+                count++;
+                choices += department.getText() + "\n";
+            }
         }
         list_departments.setText(choices);
         count_departments.setText("Количество выбраных отеделений: " + count);
