@@ -22,7 +22,7 @@ public class Main extends Application {
     private BorderPane rootLayout;
 
     public Main(){
-        data.add(new ConfValue("Ag875", "6.95", "Серебро", "Цены на драгметаллы"));
+    /*    data.add(new ConfValue("Ag875", "6.95", "Серебро", "Цены на драгметаллы"));
         data.add(new ConfValue("Au333", "237.41", "Золото", "Цены на драгметаллы"));
         data.add(new ConfValue("Au500", "356.47", "Золото", "Цены на драгметаллы"));
         data.add(new ConfValue("Ag800", "8.17", "Серебро", "Цены на драгметаллы"));
@@ -40,7 +40,7 @@ public class Main extends Application {
         data.add(new ConfValue("credit_7", "72.56", "Кредит", "Величина суммы кредита зависит от срока залога"));
         data.add(new ConfValue("credit_8", "72.49", "Кредит", "Величина суммы кредита зависит от срока залога"));
         data.add(new ConfValue("default_term", "10", "Разное", "Срок залога по умолчанию"));
-        data.add(new ConfValue("serial_port", "/dev/ttyS0", "Разное", "файл устройства COM-порта"));
+        data.add(new ConfValue("serial_port", "/dev/ttyS0", "Разное", "файл устройства COM-порта"));*/
     }
 
     @Override

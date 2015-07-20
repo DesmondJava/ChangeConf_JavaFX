@@ -35,16 +35,16 @@
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
                   <Label text="Login SSH:" />
-                  <TextField prefHeight="25.0" prefWidth="84.0" promptText="login...">
+                  <TextField fx:id="login" prefHeight="25.0" prefWidth="84.0" promptText="login...">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </TextField>
                   <Label text="Password:" />
-                  <PasswordField prefHeight="25.0" prefWidth="80.0" promptText="pass..." />
+                  <PasswordField fx:id="password" prefHeight="25.0" prefWidth="80.0" promptText="pass..." />
                   <Label text="Department:" />
                   <ComboBox fx:id="loadDiffDepart" prefWidth="150.0" promptText="Choose Department" />
-                  <Button mnemonicParsing="false" text="Load conf File" />
+                  <Button mnemonicParsing="false" onAction="#loadConfFile" text="Load conf File" />
                </children>
                <VBox.margin>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -157,7 +157,7 @@
             </HBox>
             <TableView fx:id="table" editable="true">
               <columns>
-                  <TableColumn fx:id="sort" prefWidth="75.0" text="Тип" />
+                  <TableColumn fx:id="sort" onEditStart="#handleEditConfValue" prefWidth="75.0" text="Тип" />
                 <TableColumn fx:id="title" onEditStart="#handleEditConfValue" prefWidth="312.0" text="Название" />
                 <TableColumn fx:id="value" onEditStart="#handleEditConfValue" prefWidth="286.0" text="Значение" />
               </columns>
@@ -178,7 +178,7 @@
                   <Font size="14.0" />
                </font></Label>
             <Region HBox.hgrow="ALWAYS" />
-            <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Сохранить" />
+            <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveNewValue" text="Сохранить" />
          </children>
          <BorderPane.margin>
             <Insets />

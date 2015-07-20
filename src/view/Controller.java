@@ -9,9 +9,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.ConfValue;
 import model.PriceMetal;
+import model.SSHConnect;
 import org.controlsfx.dialog.Dialogs;
 
+import java.util.List;
+
 public class Controller {
+
+    //Connect
+    @FXML
+    private TextField login;
+    @FXML
+    private TextField password;
 
     @FXML
     private TextField filterField;
@@ -185,4 +194,18 @@ public class Controller {
         list_departments.setText(choices);
         count_departments.setText("Количество выбраных отеделений: " + count);
     }
+
+    @FXML
+    private void loadConfFile(){
+        mainApp.getData().removeAll(mainApp.getData());
+        SSHConnect connect = new SSHConnect(loadDiffDepart.getValue(), login.getText(), password.getText());
+        List<ConfValue> dataFromFile = connect.loadConfFileFromSSH();
+        mainApp.getData().addAll(dataFromFile);
+    }
+
+    @FXML
+    private void saveNewValue(){
+
+    }
+
 }
