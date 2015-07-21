@@ -204,8 +204,24 @@ public class Controller {
     }
 
     @FXML
-    private void saveNewValue(){
-
+    private void saveConfFile(){
+        String message = "";
+        for (CheckBox department : checkboxesItemsDepartment) {
+            if (department.isSelected()) {
+                SSHConnect connect = new SSHConnect(department.getText(), login.getText(), password.getText());
+                System.out.println("SAFE: " + department.getText() + " " + login.getText() + " " + password.getText());
+                connect.saveFileOnSSH(mainApp.getData().subList(0, mainApp.getData().size()));
+                message += "File on " + department.getText() + " successfully updated!\n";
+            }
+        }
+        for (CheckBox department : checkboxesItemsDepartment) {
+            department.setSelected(false);
+        }
+        Dialogs.create()
+                .title("Success")
+                .masthead("Operation is complete!")
+                .message(message)
+                .showInformation();
     }
 
 }

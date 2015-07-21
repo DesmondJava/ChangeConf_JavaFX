@@ -3,10 +3,7 @@ package model;
 import com.jcraft.jsch.*;
 import org.controlsfx.dialog.Dialogs;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -17,7 +14,8 @@ public class SSHConnect {
     private final int    SFTPPORT = 22;
     private final String SFTPUSER;
     private final String SFTPPASS;
-    private final String SFTPWORKINGDIR = "/etc/pektoral/";
+//    private final String SFTPWORKINGDIR = "/etc/pektoral/";
+    private final String SFTPWORKINGDIR = "/home/vadym/";
 
     private Session     session     = null;
     private Channel     channel     = null;
@@ -57,12 +55,52 @@ public class SSHConnect {
                     .showWarning();
         }
         List<ConfValue> data = createObjectsFromFile();
+        channelSftp.disconnect();
+        channelSftp.exit();
         session.disconnect();
         channel.disconnect();
-        channelSftp.disconnect();
+
         return data;
     }
 
+    public void saveFileOnSSH(List<ConfValue> list) {
+        try {
+            long begin = System.currentTimeMillis();
+            JSch jsch = new JSch();
+            session = jsch.getSession(SFTPUSER, SFTPHOST, SFTPPORT);
+            session.setPassword(SFTPPASS);
+            java.util.Properties config = new java.util.Properties();
+            config.put("StrictHostKeyChecking", "no");
+            session.setConfig(config);
+            session.connect();
+            channel = session.openChannel("sftp");
+            channel.connect();
+            channelSftp = (ChannelSftp) channel;
+            channelSftp.cd(SFTPWORKINGDIR);
+
+            OutputStream os = channelSftp.put("pektoralTest.conf", ChannelSftp.OVERWRITE);
+            OutputStreamWriter safeFile = new OutputStreamWriter (os);
+            for (ConfValue values : list){
+                safeFile.write(values.getTitle() + " " + values.getValue() + "\n");
+                Thread.sleep(100);
+            }
+            os.flush();
+            safeFile.flush();
+            safeFile.close();
+            os.close();
+            channelSftp.disconnect();
+            session.disconnect();
+            channel.disconnect();
+            channelSftp.exit();
+
+            long finish = System.currentTimeMillis();
+
+            System.out.println("begin: " + begin + " - " + finish + " = " + (begin - finish));
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
 
     private List<ConfValue> createObjectsFromFile() {
@@ -75,7 +113,7 @@ public class SSHConnect {
             Properties properties = new Properties();
 //            properties.load(getClass().getResourceAsStream("/resources/textConfFile.properties"));
             properties.load(new InputStreamReader(new FileInputStream("src/resources/textConfFile.properties"), "windows-1251"));
-            BufferedReader readFromFile = new BufferedReader(new InputStreamReader(channelSftp.get("pektoralTest1.conf")));
+            BufferedReader readFromFile = new BufferedReader(new InputStreamReader(channelSftp.get("pektoralTest.conf")));
             String line;
             while ((line = readFromFile.readLine()) != null) {
                 if (!line.startsWith("#") && !line.isEmpty()) {

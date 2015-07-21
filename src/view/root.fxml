@@ -178,7 +178,7 @@
                   <Font size="14.0" />
                </font></Label>
             <Region HBox.hgrow="ALWAYS" />
-            <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveNewValue" text="Сохранить" />
+            <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveConfFile" text="Сохранить" />
          </children>
          <BorderPane.margin>
             <Insets />
