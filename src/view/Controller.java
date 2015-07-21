@@ -192,7 +192,7 @@ public class Controller {
             }
         }
         list_departments.setText(choices);
-        count_departments.setText("Количество выбраных отеделений: " + count);
+        count_departments.setText("Количество выбраных отделений: " + count);
     }
 
     @FXML
@@ -201,27 +201,47 @@ public class Controller {
         SSHConnect connect = new SSHConnect(loadDiffDepart.getValue(), login.getText(), password.getText());
         List<ConfValue> dataFromFile = connect.loadConfFileFromSSH();
         mainApp.getData().addAll(dataFromFile);
+        Dialogs.create()
+                .title("Success")
+                .masthead("Operation is complete!")
+                .message("File successfully downloaded from " + loadDiffDepart.getValue())
+                .showInformation();
     }
 
     @FXML
     private void saveConfFile(){
         String message = "";
+        int count = 0;
+        if(mainApp.getData().size() == 0){
+            Dialogs.create().title("Table error")
+                    .masthead("Table is empty")
+                    .message("Please download file from different departmant")
+                    .showError();
+            return;
+        }
         for (CheckBox department : checkboxesItemsDepartment) {
             if (department.isSelected()) {
                 SSHConnect connect = new SSHConnect(department.getText(), login.getText(), password.getText());
-                System.out.println("SAFE: " + department.getText() + " " + login.getText() + " " + password.getText());
+                System.out.println("SAVE: " + department.getText() + " " + login.getText() + " " + password.getText());
                 connect.saveFileOnSSH(mainApp.getData().subList(0, mainApp.getData().size()));
                 message += "File on " + department.getText() + " successfully updated!\n";
+
             }
         }
         for (CheckBox department : checkboxesItemsDepartment) {
             department.setSelected(false);
         }
+        count_departments.setText("Количество выбраных отделений: 0");
         Dialogs.create()
                 .title("Success")
                 .masthead("Operation is complete!")
                 .message(message)
                 .showInformation();
+    }
+
+    @FXML
+    private void removeTable(){
+        mainApp.getData().removeAll(mainApp.getData());
     }
 
 }

@@ -172,12 +172,14 @@
       <HBox spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#handleEditConfValue" text="Изменить" />
+            <Button mnemonicParsing="false" text="Создать" />
             <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="count_departments" alignment="CENTER_RIGHT" contentDisplay="CENTER" textAlignment="CENTER" textFill="#ff1200">
                <font>
                   <Font size="14.0" />
                </font></Label>
             <Region HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#removeTable" text="Очистить" />
             <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveConfFile" text="Сохранить" />
          </children>
          <BorderPane.margin>
