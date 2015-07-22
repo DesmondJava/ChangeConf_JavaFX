@@ -18,6 +18,11 @@ import java.io.IOException;
 public class Main extends Application {
 
     private ObservableList<ConfValue> data = FXCollections.observableArrayList();
+
+    public Stage getWindow() {
+        return window;
+    }
+
     private Stage window;
     private BorderPane rootLayout;
 
@@ -101,8 +106,6 @@ public class Main extends Application {
             return false;
         }
     }
-
-
 
     public static void main(String[] args) {
         launch(args);

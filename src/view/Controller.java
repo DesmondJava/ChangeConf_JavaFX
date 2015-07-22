@@ -7,11 +7,14 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import model.ConfValue;
+import model.Parse;
 import model.PriceMetal;
 import model.SSHConnect;
 import org.controlsfx.dialog.Dialogs;
 
+import java.io.*;
 import java.util.List;
 
 public class Controller {
@@ -243,5 +246,74 @@ public class Controller {
     private void removeTable(){
         mainApp.getData().removeAll(mainApp.getData());
     }
+
+
+
+
+   /*******************************************************************************************
+                                            BORDER_PANE - MENU
+    ******************************************************************************************/
+
+   @FXML
+   private void openFileFromChooser() {
+       FileChooser fileChooser = new FileChooser();
+       // Set extension filter
+       FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+               "Conf files (*.conf) (*.txt)", "*.conf", "*.txt");
+       fileChooser.getExtensionFilters().add(extFilter);
+
+       // Show save file dialog
+       File file = fileChooser.showOpenDialog(mainApp.getWindow());
+
+       if (file != null) {
+           try {
+               BufferedReader readFromFile = new BufferedReader(new FileReader(file));
+               List<ConfValue> dataFromFile = Parse.parseFile(readFromFile);
+               mainApp.getData().removeAll(mainApp.getData());
+               mainApp.getData().addAll(dataFromFile);
+           } catch (FileNotFoundException e) {
+               e.printStackTrace();
+           }
+
+       }
+   }
+
+    @FXML
+    private void saveAsFileFromChooser() {
+        FileChooser fileChooser = new FileChooser();
+        // Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+                "Conf files (*.conf) (*.txt)", "*.conf", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Show save file dialog
+        File file = fileChooser.showSaveDialog(mainApp.getWindow());
+
+        if (file != null) {
+            try {
+                FileWriter writeInFile = new FileWriter(file);
+                if(mainApp.getData().isEmpty()){
+                    throw new IOException();
+                }
+                for(ConfValue line : mainApp.getData()){
+                    writeInFile.write(line.getTitle() + " " + line.getValue() + "\n");
+                }
+                writeInFile.flush();
+                writeInFile.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                Dialogs.create().title("Error")
+                        .masthead("Something wrong")
+                        .message("Maybe table is empty or else")
+                        .showError();
+            }
+
+        }
+    }
+
+
+
+
 
 }
