@@ -16,22 +16,22 @@
                   <MenuItem mnemonicParsing="false" onAction="#openFileFromChooser" text="Open conf file..." />
                   <MenuItem mnemonicParsing="false" onAction="#saveAsFileFromChooser" text="Save as conf file..." />
                   <SeparatorMenuItem mnemonicParsing="false" />
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#closeProgram" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-                  <MenuItem mnemonicParsing="false" text="Create new value..." />
-                  <MenuItem mnemonicParsing="false" text="Change conf value..." />
+                  <MenuItem mnemonicParsing="false" onAction="#createNewValue" text="Create new value..." />
+                  <MenuItem mnemonicParsing="false" onAction="#handleEditConfValue" text="Change conf value..." />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Clear table..." />
+                  <MenuItem mnemonicParsing="false" onAction="#removeTable" text="Clear table..." />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Save changes on department..." />
+                  <MenuItem mnemonicParsing="false" onAction="#saveConfFile" text="Save changes on department..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About program" />
+              <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="About program" />
             </items>
           </Menu>
         </menus>
@@ -133,12 +133,13 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </TextField>
+                  <Button mnemonicParsing="false" onAction="#clearFilter" text="X" />
                   <Region HBox.hgrow="ALWAYS">
                      <HBox.margin>
-                        <Insets left="10.0" right="10.0" />
+                        <Insets left="3.0" right="3.0" />
                      </HBox.margin>
                      <padding>
-                        <Insets left="10.0" right="10.0" />
+                        <Insets left="3.0" right="3.0" />
                      </padding>
                   </Region>
                   <Label text="Gold 585:" />
@@ -180,7 +181,7 @@
       <HBox spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#handleEditConfValue" text="Изменить" />
-            <Button mnemonicParsing="false" text="Создать" />
+            <Button mnemonicParsing="false" onAction="#createNewValue" text="Создать" />
             <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="count_departments" alignment="CENTER_RIGHT" contentDisplay="CENTER" textAlignment="CENTER" textFill="#ff1200">
                <font>

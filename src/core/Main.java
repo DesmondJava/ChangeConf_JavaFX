@@ -10,6 +10,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.ConfValue;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
 import view.Controller;
 import view.EditDialogController;
 
@@ -27,30 +30,15 @@ public class Main extends Application {
     private BorderPane rootLayout;
 
     public Main(){
-    /*    data.add(new ConfValue("Ag875", "6.95", "Серебро", "Цены на драгметаллы"));
-        data.add(new ConfValue("Au333", "237.41", "Золото", "Цены на драгметаллы"));
-        data.add(new ConfValue("Au500", "356.47", "Золото", "Цены на драгметаллы"));
-        data.add(new ConfValue("Ag800", "8.17", "Серебро", "Цены на драгметаллы"));
-        data.add(new ConfValue("Ag900", "7.15", "Серебро", "Цены на драгметаллы"));
-        data.add(new ConfValue("Au750", "534.70", "Золото", "Цены на драгметаллы"));
-        data.add(new ConfValue("interest_640", "0.921", "Проценты", "# проценты за пользование кредитом в зависимости от суммы кредита\n" +
-                "# сумма - целое число\n" +
-                "# процент - в формате 0.0999 (указать обязательно: 1 цифру в целой части, десятичную точку и хотя бы 1 цифру в дробной части)\n" +
-                "# пример: кредит до 5238 (т.е. кредит меньше 5238) - процент 0.816"));
-        data.add(new ConfValue("interest_1289", "0.885", "Проценты", "# проценты за пользование кредитом в зависимости от суммы кредита\n" +
-                "# сумма - целое число\n" +
-                "# процент - в формате 0.0999 (указать обязательно: 1 цифру в целой части, десятичную точку и хотя бы 1 цифру в дробной части)\n" +
-                "# пример: кредит до 5238 (т.е. кредит меньше 5238) - процент 0.816"));
-        data.add(new ConfValue("credit_5", "72.71", "Кредит", "Величина суммы кредита зависит от срока залога"));
-        data.add(new ConfValue("credit_7", "72.56", "Кредит", "Величина суммы кредита зависит от срока залога"));
-        data.add(new ConfValue("credit_8", "72.49", "Кредит", "Величина суммы кредита зависит от срока залога"));
-        data.add(new ConfValue("default_term", "10", "Разное", "Срок залога по умолчанию"));
-        data.add(new ConfValue("serial_port", "/dev/ttyS0", "Разное", "файл устройства COM-порта"));*/
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.window = primaryStage;
+        window.setOnCloseRequest(e -> {
+            e.consume();
+            closeProgram();
+        });
         this.window.setTitle("Pectorale configuration");
         showConfValuesOverview();
     }
@@ -104,6 +92,17 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void closeProgram(){
+        Action response = Dialogs.create()
+                .title("Close the program")
+                .masthead("Close the program")
+                .message("Are you sure you want to exit?")
+                .showConfirm();
+        if (response == Dialog.Actions.YES) {
+            window.close();
         }
     }
 

@@ -247,6 +247,19 @@ public class Controller {
         mainApp.getData().removeAll(mainApp.getData());
     }
 
+    @FXML
+    private void clearFilter(){
+        filterField.setText("");
+    }
+
+    @FXML
+    private void createNewValue(){
+        ConfValue tempConf = new ConfValue();
+        boolean okClicked = mainApp.showConfValueEditDialog(tempConf);
+        if (okClicked) {
+            mainApp.getData().add(tempConf);
+        }
+    }
 
 
 
@@ -310,6 +323,23 @@ public class Controller {
             }
 
         }
+    }
+
+    /**
+     * Opens an about dialog.
+     */
+    @FXML
+    private void handleAbout() {
+        Dialogs.create()
+                .title("Pectorale configuration")
+                .masthead("About program")
+                .message("Pectorale configuration v 2.01\nCopyright 2015 Pectorale corporation\nAuthor: Vadym Shevchenko\nWebsite: http://vk.com/spawnkiev\nJavaFX 2, 2015")
+                .showInformation();
+    }
+
+    @FXML
+    private void closeProgram() {
+        mainApp.closeProgram();
     }
 
 
