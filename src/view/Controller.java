@@ -204,7 +204,7 @@ public class Controller {
         SSHConnect connect = new SSHConnect(loadDiffDepart.getValue(), login.getText(), password.getText());
         List<ConfValue> dataFromFile = connect.loadConfFileFromSSH();
         mainApp.getData().addAll(dataFromFile);
-        Dialogs.create()
+        Dialogs.create().owner(mainApp.getWindow())
                 .title("Success")
                 .masthead("Operation is complete!")
                 .message("File successfully downloaded from " + loadDiffDepart.getValue())
@@ -231,6 +231,8 @@ public class Controller {
 
             }
         }
+
+        //Убираем галочки для загрузки на отеделния и сбрасываем счетчик
         for (CheckBox department : checkboxesItemsDepartment) {
             department.setSelected(false);
         }
@@ -333,7 +335,7 @@ public class Controller {
         Dialogs.create()
                 .title("Pectorale configuration")
                 .masthead("About program")
-                .message("Pectorale configuration v 2.01\nCopyright 2015 Pectorale corporation\nAuthor: Vadym Shevchenko\nWebsite: http://vk.com/spawnkiev\nJavaFX 2, 2015")
+                .message("Pectorale configuration v 2.01\nCopyright 2015 Pectorale corporation\nAuthor: Vadym Shevchenko\nWebsite: http://vk.com/spawnkiev\nJavaFX 2.2, 2015")
                 .showInformation();
     }
 

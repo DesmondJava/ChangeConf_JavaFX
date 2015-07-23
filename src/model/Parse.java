@@ -31,25 +31,34 @@ public class Parse {
                     line = line.replaceAll(" +", " ");
 
                     String[] lineArr = line.trim().split(" ");
-                    switch (lineArr[word1].substring(0, 2)){
-                        case "Au":
-                            confValues.add(new ConfValue(lineArr[word1], lineArr[word2],
-                                    properties.getProperty("gold"), properties.getProperty("metal_descr")));
+                    switch (lineArr[word1]){
+                        case "Au333":
+                        case "Au375":
+                        case "Au500":
+                        case "Au583":
+                        case "Au585":
+                        case "Au750":
+                        case "Au809":
+                        case "Au900":
+                        case "Au916":
+                        case "Au958": confValues.add(new ConfValue(lineArr[word1], lineArr[word2],
+                                properties.getProperty("gold"), properties.getProperty("metal_descr")));
                             break;
-                        case "Ag":
-                            confValues.add(new ConfValue(lineArr[word1], lineArr[word2],
-                                    properties.getProperty("silver"), properties.getProperty("metal_descr")));
+                        case "Ag800":
+                        case "Ag830":
+                        case "Ag875":
+                        case "Ag900":
+                        case "Ag916":
+                        case "Ag925":
+                        case "Ag960": confValues.add(new ConfValue(lineArr[word1], lineArr[word2],
+                                properties.getProperty("silver"), properties.getProperty("metal_descr")));
                             break;
-                        case "Pt":
+                        case "Pt950":
+                        case "Pl500":
+                        case "Pl850":
                             confValues.add(new ConfValue(lineArr[word1], lineArr[word2],
                                     properties.getProperty("platina"), properties.getProperty("metal_descr")));
                             break;
-                        case "Pl":
-                            confValues.add(new ConfValue(lineArr[word1], lineArr[word2],
-                                    properties.getProperty("pl"), properties.getProperty("metal_descr")));
-                            break;
-                    }
-                    switch (lineArr[word1]){
                         case "fine":
                             confValues.add(new ConfValue(lineArr[word1], lineArr[word2],
                                     properties.getProperty("stavka"), properties.getProperty("stavka_descr")));
@@ -98,7 +107,9 @@ public class Parse {
                             confValues.add(new ConfValue(lineArr[word1], lineArr[word2],
                                     properties.getProperty("diff"), properties.getProperty("nowait_term")));
                             break;
-
+                        default:
+                            confValues.add(new ConfValue(lineArr[word1], lineArr[word2],
+                                    properties.getProperty("diff"), properties.getProperty("diff_discr")));
                     }
                 }
             }

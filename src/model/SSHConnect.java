@@ -15,12 +15,14 @@ public class SSHConnect {
     private final int    SFTPPORT = 22;
     private final String SFTPUSER;
     private final String SFTPPASS;
-//    private final String SFTPWORKINGDIR = "/etc/pektoral/";
-    private final String SFTPWORKINGDIR = "/home/vadym/";
+    private final String SFTPWORKINGDIR = "/etc/pektoral/";
+//    private final String SFTPWORKINGDIR = "/home/vadym/";
 
     private Session     session     = null;
     private Channel     channel     = null;
     private ChannelSftp channelSftp = null;
+
+    public boolean loading = false;
 
     public SSHConnect(String host, String user, String password) {
         SFTPHOST = host;
@@ -44,13 +46,16 @@ public class SSHConnect {
             channelSftp.cd(SFTPWORKINGDIR);
             BufferedReader readFromFile = new BufferedReader(new InputStreamReader(channelSftp.get("pektoralTest.conf")));
             result = Parse.parseFile(readFromFile);
+            loading = true;
         }catch(JSchException ex){
+            loading = true;
             Dialogs.create()
                     .title("Lost connection")
                     .masthead("Something wrong with your connection...")
                     .message("Maybe correct you login or password.'")
                     .showWarning();
         }catch(Exception ex){
+            loading = true;
             ex.printStackTrace();
             Dialogs.create()
                     .title("Error")
@@ -67,7 +72,6 @@ public class SSHConnect {
 
     public void saveFileOnSSH(List<ConfValue> list) {
         try {
-            long begin = System.currentTimeMillis();
             JSch jsch = new JSch();
             session = jsch.getSession(SFTPUSER, SFTPHOST, SFTPPORT);
             session.setPassword(SFTPPASS);
@@ -84,7 +88,7 @@ public class SSHConnect {
             OutputStreamWriter safeFile = new OutputStreamWriter (os);
             for (ConfValue values : list){
                 safeFile.write(values.getTitle() + " " + values.getValue() + "\n");
-                Thread.sleep(100);
+                Thread.sleep(200);
             }
             os.flush();
             safeFile.flush();
@@ -94,11 +98,6 @@ public class SSHConnect {
             session.disconnect();
             channel.disconnect();
             channelSftp.exit();
-
-            long finish = System.currentTimeMillis();
-
-            System.out.println("begin: " + begin + " - " + finish + " = " + (begin - finish));
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
