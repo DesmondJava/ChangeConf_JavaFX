@@ -1,5 +1,7 @@
 package view;
 
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 import core.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +17,12 @@ import model.SSHConnect;
 import org.controlsfx.dialog.Dialogs;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 public class Controller {
 
@@ -202,8 +209,44 @@ public class Controller {
     private void loadConfFile(){
         mainApp.getData().removeAll(mainApp.getData());
         SSHConnect connect = new SSHConnect(loadDiffDepart.getValue(), login.getText(), password.getText());
-        List<ConfValue> dataFromFile = connect.loadConfFileFromSSH();
-        mainApp.getData().addAll(dataFromFile);
+        System.out.println("LOAD: " + loadDiffDepart.getValue() + " " + login.getText() + " " + password.getText());
+
+     /*   new Thread(() -> {
+            System.out.println("Щас будет цикл переменной");
+            String loading = "Loading file from " + loadDiffDepart.getValue();
+            while(!connect.loading) {
+                for(int i = 0; i < 4; i++) {
+                    if(i == 0) {
+                        count_departments.setText(loading);
+                    } if (i == 1) {
+                        count_departments.setText(loading + ".");
+                        System.out.println("Мы в цикле" + connect.loading + "i = 1");
+                    } if (i == 2) {
+                        count_departments.setText(loading + ". .");
+                    } if (i == 3) {
+                        count_departments.setText(loading + ". . .");
+                    }
+                    System.out.println("Мы в цикле" + connect.loading);
+                }
+                try {
+                    System.out.println("Спим в цикле");
+                    Thread.sleep(600);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();*/
+
+            List<ConfValue> dataFromFile = connect.loadConfFileFromSSH();
+//            System.out.println("Мы в потоке...");
+            mainApp.getData().addAll(dataFromFile);
+
+
+
+
+//        System.out.println("EXIT LOOP" + connect.loading);
+//        count_departments.setText("");
+
         Dialogs.create().owner(mainApp.getWindow())
                 .title("Success")
                 .masthead("Operation is complete!")
@@ -213,8 +256,7 @@ public class Controller {
 
     @FXML
     private void saveConfFile(){
-        String message = "";
-        int count = 0;
+        long begin = System.currentTimeMillis();
         if(mainApp.getData().size() == 0){
             Dialogs.create().title("Table error")
                     .masthead("Table is empty")
@@ -222,15 +264,39 @@ public class Controller {
                     .showError();
             return;
         }
+        //Создаем нити и каждая коннектиться по ССШ к отделению
+        ExecutorService executor = Executors.newFixedThreadPool(9);
+        List<FutureTask> taskList = new ArrayList<>();
+        String resultFuture = "";
+
         for (CheckBox department : checkboxesItemsDepartment) {
             if (department.isSelected()) {
-                SSHConnect connect = new SSHConnect(department.getText(), login.getText(), password.getText());
-                System.out.println("SAVE: " + department.getText() + " " + login.getText() + " " + password.getText());
-                connect.saveFileOnSSH(mainApp.getData().subList(0, mainApp.getData().size()));
-                message += "File on " + department.getText() + " successfully updated!\n";
-
+                FutureTask annonymos = new FutureTask<>(() -> {
+                    SSHConnect connect = new SSHConnect(department.getText(), login.getText(), password.getText());
+                    System.out.println("SAVE: " + department.getText() + " " + login.getText() + " " + password.getText());
+                    try {
+                        connect.saveFileOnSSH(mainApp.getData().subList(0, mainApp.getData().size()));
+                    } catch (JSchException | SftpException | IOException ex){
+                        ex.printStackTrace();
+                        return "File on " + department.getText() + " not updated!\n        Something wrong with connection!\n";
+                    }
+                    return "File on " + department.getText() + " successfully updated!\n";
+                });
+                taskList.add(annonymos);
+                executor.execute(annonymos);
             }
         }
+
+        // Проверяем, завершили ли работу наши нити?
+        for (FutureTask futureTask : taskList) {
+            try {
+                resultFuture += futureTask.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        executor.shutdown();
 
         //Убираем галочки для загрузки на отеделния и сбрасываем счетчик
         for (CheckBox department : checkboxesItemsDepartment) {
@@ -240,8 +306,9 @@ public class Controller {
         Dialogs.create()
                 .title("Success")
                 .masthead("Operation is complete!")
-                .message(message)
+                .message(resultFuture)
                 .showInformation();
+        System.out.println("Время потрачено на этот метод - " + (System.currentTimeMillis() - begin));
     }
 
     @FXML

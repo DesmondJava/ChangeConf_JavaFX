@@ -3,10 +3,8 @@ package model;
 import com.jcraft.jsch.*;
 import org.controlsfx.dialog.Dialogs;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.net.*;
 import java.util.List;
 
 public class SSHConnect {
@@ -15,14 +13,14 @@ public class SSHConnect {
     private final int    SFTPPORT = 22;
     private final String SFTPUSER;
     private final String SFTPPASS;
-    private final String SFTPWORKINGDIR = "/etc/pektoral/";
-//    private final String SFTPWORKINGDIR = "/home/vadym/";
+//    private final String SFTPWORKINGDIR = "/etc/pektoral/";
+    private final String SFTPWORKINGDIR = "/home/vadym/";
 
     private Session     session     = null;
     private Channel     channel     = null;
     private ChannelSftp channelSftp = null;
 
-    public boolean loading = false;
+    public volatile boolean loading = false;
 
     public SSHConnect(String host, String user, String password) {
         SFTPHOST = host;
@@ -54,7 +52,7 @@ public class SSHConnect {
                     .masthead("Something wrong with your connection...")
                     .message("Maybe correct you login or password.'")
                     .showWarning();
-        }catch(Exception ex){
+        }catch(Exception ex) {
             loading = true;
             ex.printStackTrace();
             Dialogs.create()
@@ -63,45 +61,44 @@ public class SSHConnect {
                     .message("No file or directory. Maybe something else...")
                     .showWarning();
         }
-        channelSftp.disconnect();
         channelSftp.exit();
-        session.disconnect();
         channel.disconnect();
+        session.disconnect();
         return result;
     }
 
-    public void saveFileOnSSH(List<ConfValue> list) {
-        try {
-            JSch jsch = new JSch();
-            session = jsch.getSession(SFTPUSER, SFTPHOST, SFTPPORT);
-            session.setPassword(SFTPPASS);
-            java.util.Properties config = new java.util.Properties();
-            config.put("StrictHostKeyChecking", "no");
-            session.setConfig(config);
-            session.connect();
-            channel = session.openChannel("sftp");
-            channel.connect();
-            channelSftp = (ChannelSftp) channel;
-            channelSftp.cd(SFTPWORKINGDIR);
+    public void saveFileOnSSH(List<ConfValue> list) throws ConnectException, JSchException, SftpException, IOException{
+        JSch jsch = new JSch();
+        session = jsch.getSession(SFTPUSER, SFTPHOST, SFTPPORT);
+        session.setPassword(SFTPPASS);
+        java.util.Properties config = new java.util.Properties();
+        config.put("StrictHostKeyChecking", "no");
+        session.setConfig(config);
+        session.connect();
+        channel = session.openChannel("sftp");
+        channel.connect();
+        channelSftp = (ChannelSftp) channel;
+        channelSftp.cd(SFTPWORKINGDIR);
 
-            OutputStream os = channelSftp.put("pektoralTest.conf", ChannelSftp.OVERWRITE);
-            OutputStreamWriter safeFile = new OutputStreamWriter (os);
-            for (ConfValue values : list){
-                safeFile.write(values.getTitle() + " " + values.getValue() + "\n");
+        OutputStream os = channelSftp.put("pektoralTest.conf", ChannelSftp.OVERWRITE);
+        OutputStreamWriter safeFile = new OutputStreamWriter(os);
+        for (ConfValue values : list) {
+            safeFile.write(values.getTitle() + " " + values.getValue() + "\n");
+            try {
                 Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            os.flush();
-            safeFile.flush();
-            safeFile.close();
-            os.close();
-            channelSftp.disconnect();
-            session.disconnect();
-            channel.disconnect();
-            channelSftp.exit();
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
+        os.flush();
+        safeFile.flush();
+        safeFile.close();
+        os.close();
+        channelSftp.disconnect();
+        channel.disconnect();
+        session.disconnect();
     }
 
-
 }
+
+
