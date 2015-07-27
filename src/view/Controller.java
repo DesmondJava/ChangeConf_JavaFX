@@ -90,17 +90,17 @@ public class Controller {
 
     @FXML
     private void initialize() {
-        //Инициализируем таблицу (колонки)
+        //Р�РЅРёС†РёР°Р»РёР·РёСЂСѓРµРј С‚Р°Р±Р»РёС†Сѓ (РєРѕР»РѕРЅРєРё)
         sort.setCellValueFactory(cellData -> cellData.getValue().sortProperty());
         title.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         value.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
 
-        //Добавляем все отделения CheckBox (галочки) в массив
+        //Р”РѕР±Р°РІР»СЏРµРј РІСЃРµ РѕС‚РґРµР»РµРЅРёСЏ CheckBox (РіР°Р»РѕС‡РєРё) РІ РјР°СЃСЃРёРІ
         checkboxesItemsDepartment = FXCollections.observableArrayList();
         checkboxesItemsDepartment.addAll(department1, department2, department3, department4,
                 department5, department6, department7, department9, department0);
 
-        //Проходим по всем галочкам и добавляем с них текст в выпадающий список при загрузки конф файла
+        //РџСЂРѕС…РѕРґРёРј РїРѕ РІСЃРµРј РіР°Р»РѕС‡РєР°Рј Рё РґРѕР±Р°РІР»СЏРµРј СЃ РЅРёС… С‚РµРєСЃС‚ РІ РІС‹РїР°РґР°СЋС‰РёР№ СЃРїРёСЃРѕРє РїСЂРё Р·Р°РіСЂСѓР·РєРё РєРѕРЅС„ С„Р°Р№Р»Р°
         ObservableList<String> listItemsDepartment = FXCollections.observableArrayList();
         for(CheckBox department : checkboxesItemsDepartment){
             listItemsDepartment.add(department.getText());
@@ -111,7 +111,7 @@ public class Controller {
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         // Add observable list data to the table
-        ObservableList data = mainApp.getData();
+        ObservableList<ConfValue> data = mainApp.getData();
         FilteredList<ConfValue> filteredData = new FilteredList<>(data, p -> true);
         // 2. Set the filter Predicate whenever the filter changes.
         filterField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -202,51 +202,19 @@ public class Controller {
             }
         }
         list_departments.setText(choices);
-        count_departments.setText("Количество выбраных отделений: " + count);
+        count_departments.setText("РљРѕР»РёС‡РµСЃС‚РІРѕ РІС‹Р±СЂР°РЅС‹С… РѕС‚РґРµР»РµРЅРёР№: " + count);
     }
 
     @FXML
     private void loadConfFile(){
+        if(isLoginAndPassEmpty()){
+            return;
+        }
         mainApp.getData().removeAll(mainApp.getData());
         SSHConnect connect = new SSHConnect(loadDiffDepart.getValue(), login.getText(), password.getText());
         System.out.println("LOAD: " + loadDiffDepart.getValue() + " " + login.getText() + " " + password.getText());
-
-     /*   new Thread(() -> {
-            System.out.println("Щас будет цикл переменной");
-            String loading = "Loading file from " + loadDiffDepart.getValue();
-            while(!connect.loading) {
-                for(int i = 0; i < 4; i++) {
-                    if(i == 0) {
-                        count_departments.setText(loading);
-                    } if (i == 1) {
-                        count_departments.setText(loading + ".");
-                        System.out.println("Мы в цикле" + connect.loading + "i = 1");
-                    } if (i == 2) {
-                        count_departments.setText(loading + ". .");
-                    } if (i == 3) {
-                        count_departments.setText(loading + ". . .");
-                    }
-                    System.out.println("Мы в цикле" + connect.loading);
-                }
-                try {
-                    System.out.println("Спим в цикле");
-                    Thread.sleep(600);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();*/
-
-            List<ConfValue> dataFromFile = connect.loadConfFileFromSSH();
-//            System.out.println("Мы в потоке...");
-            mainApp.getData().addAll(dataFromFile);
-
-
-
-
-//        System.out.println("EXIT LOOP" + connect.loading);
-//        count_departments.setText("");
-
+        List<ConfValue> dataFromFile = connect.loadConfFileFromSSH();
+        mainApp.getData().addAll(dataFromFile);
         Dialogs.create().owner(mainApp.getWindow())
                 .title("Success")
                 .masthead("Operation is complete!")
@@ -256,6 +224,9 @@ public class Controller {
 
     @FXML
     private void saveConfFile(){
+        if(isLoginAndPassEmpty()){
+            return;
+        }
         long begin = System.currentTimeMillis();
         if(mainApp.getData().size() == 0){
             Dialogs.create().title("Table error")
@@ -264,14 +235,16 @@ public class Controller {
                     .showError();
             return;
         }
-        //Создаем нити и каждая коннектиться по ССШ к отделению
+
+        //РЎРѕР·РґР°РµРј РЅРёС‚Рё Threads Рё РєР°Р¶РґР°СЏ РєРѕРЅРЅРµРєС‚РёС‚СЊСЃСЏ РїРѕ РЎРЎРЁ SSH Рє РѕС‚РґРµР»РµРЅРёСЋ
         ExecutorService executor = Executors.newFixedThreadPool(9);
-        List<FutureTask> taskList = new ArrayList<>();
-        String resultFuture = "";
+        List<FutureTask<String>> taskList = new ArrayList<>();
+        StringBuilder resultFuture = new StringBuilder();
+        resultFuture.append("Files successfully updated on next departments: \n\n");
 
         for (CheckBox department : checkboxesItemsDepartment) {
             if (department.isSelected()) {
-                FutureTask annonymos = new FutureTask<>(() -> {
+                FutureTask<String> annonymos = new FutureTask<>(() -> {
                     SSHConnect connect = new SSHConnect(department.getText(), login.getText(), password.getText());
                     System.out.println("SAVE: " + department.getText() + " " + login.getText() + " " + password.getText());
                     try {
@@ -287,10 +260,10 @@ public class Controller {
             }
         }
 
-        // Проверяем, завершили ли работу наши нити?
-        for (FutureTask futureTask : taskList) {
+        // РџСЂРѕРІРµСЂСЏРµРј, Р·Р°РІРµСЂС€РёР»Рё Р»Рё СЂР°Р±РѕС‚Сѓ РЅР°С€Рё РЅРёС‚Рё?
+        for (FutureTask<String> futureTask : taskList) {
             try {
-                resultFuture += futureTask.get();
+                resultFuture.append(futureTask.get());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -298,17 +271,29 @@ public class Controller {
 
         executor.shutdown();
 
-        //Убираем галочки для загрузки на отеделния и сбрасываем счетчик
+        //РЈР±РёСЂР°РµРј РіР°Р»РѕС‡РєРё РґР»СЏ Р·Р°РіСЂСѓР·РєРё РЅР° РѕС‚РµРґРµР»РЅРёСЏ Рё СЃР±СЂР°СЃС‹РІР°РµРј СЃС‡РµС‚С‡РёРє
         for (CheckBox department : checkboxesItemsDepartment) {
             department.setSelected(false);
         }
-        count_departments.setText("Количество выбраных отделений: 0");
+        list_departments.setText("");
+        count_departments.setText("РљРѕР»РёС‡РµСЃС‚РІРѕ РІС‹Р±СЂР°РЅС‹С… РѕС‚РґРµР»РµРЅРёР№: 0");
         Dialogs.create()
                 .title("Success")
                 .masthead("Operation is complete!")
-                .message(resultFuture)
+                .message(resultFuture.toString())
                 .showInformation();
-        System.out.println("Время потрачено на этот метод - " + (System.currentTimeMillis() - begin));
+        System.out.println("Р’СЂРµРјСЏ РїРѕС‚СЂР°С‡РµРЅРѕ РЅР° СЌС‚РѕС‚ РјРµС‚РѕРґ - " + (System.currentTimeMillis() - begin));
+    }
+
+    private boolean isLoginAndPassEmpty(){
+        if(login.getText() == null || login.getText().isEmpty() || password.getText() == null || password.getText().isEmpty()){
+            Dialogs.create().title("Error")
+                    .masthead("Type your login or password!")
+                    .message("I think you forget type you password or login.")
+                    .showError();
+            return true;
+        }
+        return false;
     }
 
     @FXML
@@ -356,8 +341,13 @@ public class Controller {
            } catch (FileNotFoundException e) {
                e.printStackTrace();
            }
-
        }
+       Dialogs.create()
+               .title("Success")
+               .masthead("Operation is complete!")
+               .message("File is opened in your program")
+               .showInformation();
+
    }
 
     @FXML
@@ -390,8 +380,13 @@ public class Controller {
                         .message("Maybe table is empty or else")
                         .showError();
             }
-
         }
+        Dialogs.create()
+                .title("Success")
+                .masthead("Operation is complete!")
+                .message("File successfully saved on your computer")
+                .showInformation();
+        mainApp.getData().removeAll(mainApp.getData());
     }
 
     /**
@@ -402,7 +397,8 @@ public class Controller {
         Dialogs.create()
                 .title("Pectorale configuration")
                 .masthead("About program")
-                .message("Pectorale configuration v 2.01\nCopyright 2015 Pectorale corporation\nAuthor: Vadym Shevchenko\nWebsite: http://vk.com/spawnkiev\nJavaFX 2.2, 2015")
+                .message("Pectorale configuration v 2.01\nCopyright 2015 Pectorale corporation\n" +
+                        "Author: Vadym Shevchenko\nWebsite: http://vk.com/spawnkiev\nJavaFX 2.2, 2015")
                 .showInformation();
     }
 

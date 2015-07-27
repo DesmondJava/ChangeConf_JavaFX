@@ -167,8 +167,8 @@
             <TableView fx:id="table" editable="true">
               <columns>
                   <TableColumn fx:id="sort" onEditStart="#handleEditConfValue" prefWidth="75.0" text="Тип" />
-                <TableColumn fx:id="title" onEditStart="#handleEditConfValue" prefWidth="312.0" text="Название" />
-                <TableColumn fx:id="value" onEditStart="#handleEditConfValue" prefWidth="286.0" text="Значение" />
+                <TableColumn fx:id="title" onEditStart="#handleEditConfValue" prefWidth="312.0" sortable="false" text="Название" />
+                <TableColumn fx:id="value" onEditStart="#handleEditConfValue" prefWidth="286.0" sortable="false" text="Значение" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

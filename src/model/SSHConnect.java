@@ -20,8 +20,6 @@ public class SSHConnect {
     private Channel     channel     = null;
     private ChannelSftp channelSftp = null;
 
-    public volatile boolean loading = false;
-
     public SSHConnect(String host, String user, String password) {
         SFTPHOST = host;
         SFTPUSER = user;
@@ -44,16 +42,13 @@ public class SSHConnect {
             channelSftp.cd(SFTPWORKINGDIR);
             BufferedReader readFromFile = new BufferedReader(new InputStreamReader(channelSftp.get("pektoralTest.conf")));
             result = Parse.parseFile(readFromFile);
-            loading = true;
         }catch(JSchException ex){
-            loading = true;
             Dialogs.create()
                     .title("Lost connection")
                     .masthead("Something wrong with your connection...")
                     .message("Maybe correct you login or password.'")
                     .showWarning();
         }catch(Exception ex) {
-            loading = true;
             ex.printStackTrace();
             Dialogs.create()
                     .title("Error")
