@@ -2,12 +2,13 @@ package model;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 /**
- * Created by Администратор on 22.07.2015.
+ * Created by РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ on 22.07.2015.
  */
 public class Parse {
 
@@ -20,7 +21,7 @@ public class Parse {
         try {
 
             Properties properties = new Properties();
-            properties.load(Parse.class.getResourceAsStream("/resources/textConfFile.properties"));
+            properties.load(new InputStreamReader(Parse.class.getResourceAsStream("/resources/textConfFile.properties"), "windows-1251"));
 //            properties.load(new InputStreamReader(new FileInputStream("src/resources/textConfFile.properties"), "windows-1251"));
             String line;
             while ((line = readFromFile.readLine()) != null) {

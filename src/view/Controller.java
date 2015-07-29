@@ -90,17 +90,17 @@ public class Controller {
 
     @FXML
     private void initialize() {
-        //Р�РЅРёС†РёР°Р»РёР·РёСЂСѓРµРј С‚Р°Р±Р»РёС†Сѓ (РєРѕР»РѕРЅРєРё)
+        //Initialize column in viewtable
         sort.setCellValueFactory(cellData -> cellData.getValue().sortProperty());
         title.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         value.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
 
-        //Р”РѕР±Р°РІР»СЏРµРј РІСЃРµ РѕС‚РґРµР»РµРЅРёСЏ CheckBox (РіР°Р»РѕС‡РєРё) РІ РјР°СЃСЃРёРІ
+        //Добавляем все отделения CheckBox (галочки) в массив
         checkboxesItemsDepartment = FXCollections.observableArrayList();
         checkboxesItemsDepartment.addAll(department1, department2, department3, department4,
                 department5, department6, department7, department9, department0);
 
-        //РџСЂРѕС…РѕРґРёРј РїРѕ РІСЃРµРј РіР°Р»РѕС‡РєР°Рј Рё РґРѕР±Р°РІР»СЏРµРј СЃ РЅРёС… С‚РµРєСЃС‚ РІ РІС‹РїР°РґР°СЋС‰РёР№ СЃРїРёСЃРѕРє РїСЂРё Р·Р°РіСЂСѓР·РєРё РєРѕРЅС„ С„Р°Р№Р»Р°
+        //Проходим по всем галочкам и добавляем с них текст в выпадающий список при загрузки конф файла
         ObservableList<String> listItemsDepartment = FXCollections.observableArrayList();
         for(CheckBox department : checkboxesItemsDepartment){
             listItemsDepartment.add(department.getText());
@@ -162,6 +162,11 @@ public class Controller {
         try {
             double new_price = Double.parseDouble(priceGold);
             PriceMetal.changeGoldPrice(mainApp.getData(), new_price);
+            Dialogs.create()
+                    .title("Success")
+                    .masthead("Operation is complete!")
+                    .message("The golds was changed on a new value!")
+                    .showInformation();
         } catch (NumberFormatException e) {
             Dialogs.create()
                     .title("Invalid Fields")
@@ -181,6 +186,11 @@ public class Controller {
         try {
             double new_price = Double.parseDouble(priceSilver);
             PriceMetal.changeSilverPrice(mainApp.getData(), new_price);
+            Dialogs.create()
+                    .title("Success")
+                    .masthead("Operation is complete!")
+                    .message("The silvers was changed on a new value!")
+                    .showInformation();
         } catch (NumberFormatException e){
             Dialogs.create()
                     .title("Invalid Fields")
@@ -202,7 +212,7 @@ public class Controller {
             }
         }
         list_departments.setText(choices);
-        count_departments.setText("РљРѕР»РёС‡РµСЃС‚РІРѕ РІС‹Р±СЂР°РЅС‹С… РѕС‚РґРµР»РµРЅРёР№: " + count);
+        count_departments.setText("Количество выбранных отделений: " + count);
     }
 
     @FXML
@@ -235,8 +245,10 @@ public class Controller {
                     .showError();
             return;
         }
+        //Убираем сортировку и фильтр
+        filterField.setText("");
 
-        //РЎРѕР·РґР°РµРј РЅРёС‚Рё Threads Рё РєР°Р¶РґР°СЏ РєРѕРЅРЅРµРєС‚РёС‚СЊСЃСЏ РїРѕ РЎРЎРЁ SSH Рє РѕС‚РґРµР»РµРЅРёСЋ
+        //Create threads for faster job when connect to SSH departments
         ExecutorService executor = Executors.newFixedThreadPool(9);
         List<FutureTask<String>> taskList = new ArrayList<>();
         StringBuilder resultFuture = new StringBuilder();
@@ -260,7 +272,7 @@ public class Controller {
             }
         }
 
-        // РџСЂРѕРІРµСЂСЏРµРј, Р·Р°РІРµСЂС€РёР»Рё Р»Рё СЂР°Р±РѕС‚Сѓ РЅР°С€Рё РЅРёС‚Рё?
+        // Wait when all task will comlete
         for (FutureTask<String> futureTask : taskList) {
             try {
                 resultFuture.append(futureTask.get());
@@ -271,18 +283,18 @@ public class Controller {
 
         executor.shutdown();
 
-        //РЈР±РёСЂР°РµРј РіР°Р»РѕС‡РєРё РґР»СЏ Р·Р°РіСЂСѓР·РєРё РЅР° РѕС‚РµРґРµР»РЅРёСЏ Рё СЃР±СЂР°СЃС‹РІР°РµРј СЃС‡РµС‚С‡РёРє
+        //Remove checkbox true items
         for (CheckBox department : checkboxesItemsDepartment) {
             department.setSelected(false);
         }
         list_departments.setText("");
-        count_departments.setText("РљРѕР»РёС‡РµСЃС‚РІРѕ РІС‹Р±СЂР°РЅС‹С… РѕС‚РґРµР»РµРЅРёР№: 0");
+        count_departments.setText("Количество выбранных отделений: 0");
         Dialogs.create()
                 .title("Success")
                 .masthead("Operation is complete!")
                 .message(resultFuture.toString())
                 .showInformation();
-        System.out.println("Р’СЂРµРјСЏ РїРѕС‚СЂР°С‡РµРЅРѕ РЅР° СЌС‚РѕС‚ РјРµС‚РѕРґ - " + (System.currentTimeMillis() - begin));
+        System.out.println("Время потрачено на данный метод - " + (System.currentTimeMillis() - begin));
     }
 
     private boolean isLoginAndPassEmpty(){
@@ -338,15 +350,15 @@ public class Controller {
                List<ConfValue> dataFromFile = Parse.parseFile(readFromFile);
                mainApp.getData().removeAll(mainApp.getData());
                mainApp.getData().addAll(dataFromFile);
+               Dialogs.create()
+                       .title("Success")
+                       .masthead("Operation is complete!")
+                       .message("File is opened in your program")
+                       .showInformation();
            } catch (FileNotFoundException e) {
                e.printStackTrace();
            }
        }
-       Dialogs.create()
-               .title("Success")
-               .masthead("Operation is complete!")
-               .message("File is opened in your program")
-               .showInformation();
 
    }
 
@@ -372,6 +384,12 @@ public class Controller {
                 }
                 writeInFile.flush();
                 writeInFile.close();
+                Dialogs.create()
+                        .title("Success")
+                        .masthead("Operation is complete!")
+                        .message("File successfully saved on your computer")
+                        .showInformation();
+                mainApp.getData().removeAll(mainApp.getData());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -381,12 +399,8 @@ public class Controller {
                         .showError();
             }
         }
-        Dialogs.create()
-                .title("Success")
-                .masthead("Operation is complete!")
-                .message("File successfully saved on your computer")
-                .showInformation();
-        mainApp.getData().removeAll(mainApp.getData());
+
+
     }
 
     /**

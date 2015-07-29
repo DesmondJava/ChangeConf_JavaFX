@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Controller">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -42,8 +42,8 @@
          <children>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <Label text="Login SSH:" />
-                  <TextField fx:id="login" prefHeight="25.0" prefWidth="84.0" promptText="login..." text="vadym">
+                  <Label minWidth="70.0" text="Login SSH:" />
+                  <TextField fx:id="login" minWidth="100.0" prefHeight="25.0" prefWidth="84.0" promptText="login..." text="vadym">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -52,7 +52,7 @@
                   <PasswordField fx:id="password" prefHeight="25.0" prefWidth="80.0" promptText="pass..." text="Nooj7Noe" />
                   <Label text="Department:" />
                   <ComboBox fx:id="loadDiffDepart" prefWidth="150.0" promptText="Choose Department" />
-                  <Button mnemonicParsing="false" onAction="#loadConfFile" text="Load conf File" />
+                  <Button minWidth="110.0" mnemonicParsing="false" onAction="#loadConfFile" text="Load conf File" />
                </children>
                <VBox.margin>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -166,7 +166,7 @@
             </HBox>
             <TableView fx:id="table" editable="true">
               <columns>
-                  <TableColumn fx:id="sort" onEditStart="#handleEditConfValue" prefWidth="75.0" text="Тип" />
+                  <TableColumn fx:id="sort" onEditStart="#handleEditConfValue" prefWidth="75.0" sortable="false" text="Тип" />
                 <TableColumn fx:id="title" onEditStart="#handleEditConfValue" prefWidth="312.0" sortable="false" text="Название" />
                 <TableColumn fx:id="value" onEditStart="#handleEditConfValue" prefWidth="286.0" sortable="false" text="Значение" />
               </columns>
