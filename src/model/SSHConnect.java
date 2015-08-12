@@ -13,8 +13,9 @@ public class SSHConnect {
     private final int    SFTPPORT = 22;
     private final String SFTPUSER;
     private final String SFTPPASS;
-//    private final String SFTPWORKINGDIR = "/etc/pektoral/";
-    private final String SFTPWORKINGDIR = "/home/vadym/";
+    private final String SFTPWORKINGDIR = "/etc/pektoral/";
+//    private final String SFTPWORKINGDIR = "/home/vadym/";
+    private final String SFTPWORKINFILE = "pektoralTest.conf";
 
     private Session     session     = null;
     private Channel     channel     = null;
@@ -40,7 +41,7 @@ public class SSHConnect {
             channel.connect();
             channelSftp = (ChannelSftp)channel;
             channelSftp.cd(SFTPWORKINGDIR);
-            BufferedReader readFromFile = new BufferedReader(new InputStreamReader(channelSftp.get("pektoralTest.conf")));
+            BufferedReader readFromFile = new BufferedReader(new InputStreamReader(channelSftp.get(SFTPWORKINFILE)));
             result = Parse.parseFile(readFromFile);
         }catch(JSchException ex){
             Dialogs.create()
@@ -75,10 +76,10 @@ public class SSHConnect {
         channelSftp = (ChannelSftp) channel;
         channelSftp.cd(SFTPWORKINGDIR);
 
-        OutputStream os = channelSftp.put("pektoralTest.conf", ChannelSftp.OVERWRITE);
+        OutputStream os = channelSftp.put(SFTPWORKINFILE, ChannelSftp.OVERWRITE);
         OutputStreamWriter safeFile = new OutputStreamWriter(os);
         for (ConfValue values : list) {
-            safeFile.write(values.getTitle() + " " + values.getValue() + "\n");
+            safeFile.write(values.getTitle() + "\t" + values.getValue() + "\n");
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {

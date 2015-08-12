@@ -380,7 +380,7 @@ public class Controller {
                     throw new IOException();
                 }
                 for(ConfValue line : mainApp.getData()){
-                    writeInFile.write(line.getTitle() + " " + line.getValue() + "\n");
+                    writeInFile.write(line.getTitle() + "\t" + line.getValue() + "\n");
                 }
                 writeInFile.flush();
                 writeInFile.close();
