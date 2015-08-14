@@ -43,13 +43,13 @@
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
                   <Label minWidth="70.0" text="Login SSH:" />
-                  <TextField fx:id="login" minWidth="100.0" prefHeight="25.0" prefWidth="84.0" promptText="login..." text="vadym">
+                  <TextField fx:id="login" minWidth="100.0" prefHeight="25.0" prefWidth="84.0" promptText="login...">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </TextField>
                   <Label text="Password:" />
-                  <PasswordField fx:id="password" prefHeight="25.0" prefWidth="80.0" promptText="pass..." text="Nooj7Noe" />
+                  <PasswordField fx:id="password" prefHeight="25.0" prefWidth="80.0" promptText="password..." />
                   <Label text="Department:" />
                   <ComboBox fx:id="loadDiffDepart" prefWidth="150.0" promptText="Choose Department" />
                   <Button minWidth="110.0" mnemonicParsing="false" onAction="#loadConfFile" text="Load conf File" />

@@ -14,8 +14,7 @@ public class SSHConnect {
     private final String SFTPUSER;
     private final String SFTPPASS;
     private final String SFTPWORKINGDIR = "/etc/pektoral/";
-//    private final String SFTPWORKINGDIR = "/home/vadym/";
-    private final String SFTPWORKINFILE = "pektoralTest.conf";
+    private final String SFTPWORKINFILE = "pektoral.conf";
 
     private Session     session     = null;
     private Channel     channel     = null;
