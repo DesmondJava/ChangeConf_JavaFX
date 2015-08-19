@@ -80,13 +80,18 @@ public class SSHConnect {
         for (ConfValue values : list) {
             safeFile.write(values.getTitle() + "\t" + values.getValue() + "\n");
             try {
-                Thread.sleep(200);
+                Thread.sleep(400);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        os.flush();
         safeFile.flush();
+        os.flush();
+        try {
+            Thread.sleep(350);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         safeFile.close();
         os.close();
         channelSftp.disconnect();
