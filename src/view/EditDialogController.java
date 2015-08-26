@@ -37,11 +37,16 @@ public class EditDialogController {
             this.dialogStage = dialogStage;
         }
 
-        public void setMetal(ConfValue confValue) {
+        public void setConfValue(ConfValue confValue) {
             this.confValue = confValue;
             this.title.setText(confValue.getTitle());
             this.value.setText(confValue.getValue());
             this.description.setText(confValue.getDescription());
+            if(confValue.getDescription() == null){
+                this.description.setText("Разные настройки");
+            }
+
+
         }
 
         /**
@@ -58,9 +63,14 @@ public class EditDialogController {
          */
         @FXML
         private void handleOk() {
+             if(confValue.getDescription() == null || confValue.getSort() == null){
+                confValue.setDescription("Разные настройки");
+                confValue.setSort("Разное");
+
+            }
             if (isInputValid()) {
                 confValue.setTitle(title.getText());
-                confValue.setPrice(value.getText());
+                confValue.setValue(value.getText());
                 okClicked = true;
                 dialogStage.close();
             }
